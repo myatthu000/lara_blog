@@ -11,10 +11,10 @@
                 <div class="card">
                     <div class="card-header">Article Detail</div>
 
-                    @inject("users","App\Models\User")
+{{--                    @inject("users","App\Models\User")--}}
 
                     <div class="card-body">
-{{--                        {{ $article }}--}}
+                        {{ $article  }}
                         <h4 class="me-2">{{ $article->title }}</h4>
                         <div class="d-flex justify-content-sm-start align-items-center py-3">
                             <p class="me-2">
@@ -27,8 +27,8 @@
                                 </small>
                             </p>
                             <p class="">
-
-                                {{ $users->find($article->user_id)->name }}
+                                {{$article->getUser->name}}
+{{--                                {{ $users->find($article->user_id)->name }}--}}
                             </p>
                         </div>
                         <p class="mb-2">{{ $article->description }}</p>

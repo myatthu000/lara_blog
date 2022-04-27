@@ -25,4 +25,7 @@ class HomeController extends Controller
     {
         return view('home');
     }
+    public function usePhone(){
+        return "Use Phone for VIP";
+    }
 }

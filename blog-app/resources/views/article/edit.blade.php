@@ -1,6 +1,18 @@
 {{--<p>{{ $article }}</p>--}}
 
 @extends('layouts.app')
+@section("css-head")
+    <style>
+        .cus-img{
+            width:150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 0.25rem;
+            margin-top: 30px;
+
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="container">
@@ -29,7 +41,7 @@
                     <div class="card-header">Add Article</div>
                     <div class="card-body">
 
-                        <form action="{{route("article.update",$article->id)}}" method="post">
+                        <form action="{{route("article.update",$article->id)}}" id="article-form" method="post">
                             @method("PATCH")
                             @csrf
                             <div class="form-group mb-3">
@@ -46,12 +58,50 @@
                                 <small class="font-weight-bold text-danger">{{$message}}</small>
                                 @enderror
                             </div>
-                            <button class="btn btn-info">Update Article</button>
+                            <hr>
+
+                            <button class="btn btn-info text-center" for="article-form">Update Article</button>
                         </form>
+
+{{--                        @inject("photo","App\Models\Photo")--}}
+                        @foreach($article->getPhotos as $img)
+
+                            <div class="d-inline-block">
+                                <img class="cus-img" src="{{ asset("storage/article/".$img->location) }}" alt="{{ $img->location }}">
+
+                                <form class="" action="{{ route("photo.destroy",$img->id) }}" method="post">
+                                    @csrf
+                                    @method("delete")
+                                    <button style="margin-top: -80px;margin-left: 5px;" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+
+                            </div>
+                        @endforeach
+
+                        <div class="mt-2">
+                            <form action="{{ route("photo.store") }}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="article_id" value="{{ $article->id }}">
+                                <div class="d-flex">
+                                    <div class="col-6 me-3">
+{{--                                        <label for="photo">Edit Photo</label>--}}
+                                        <input required type="file" class="form-control" name="photo[]" id="photo" multiple>
+                                        @error("photo.*")
+                                        <small class="text-danger fw-bold">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-info">Edit Article Photo</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
 
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
 @endsection

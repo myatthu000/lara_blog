@@ -27,7 +27,7 @@
                     <div class="card-header">Add Article</div>
                     <div class="card-body">
 
-                        <form action="{{route("article.store")}}" method="post">
+                        <form action="{{route("article.store")}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group mb-3">
                                 <label for="title" class="mb-2 ">Article Title</label>
@@ -35,6 +35,15 @@
                                 @error('title')
                                 <small class="font-weight-bold text-danger">{{$message}}</small>
                                 @enderror
+                            </div>
+                            <div class="">
+                                <div class="form-control">
+                                    <label for="photo">Upload Photo</label>
+                                    <input type="file" class="form-control" name="photo[]" id="photo" multiple>
+                                    @error("photo.*")
+                                        <small class="text-danger fw-bold">{{ $message }}</small>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="description" class="mb-2">Description</label>
@@ -47,7 +56,21 @@
                         </form>
 
                     </div>
+
                 </div>
+
+                    @isset($arr)
+                    <div class="card">
+                        <ul>
+                            @foreach($arr as $a)
+                                @if($a != "." && $a != "..")
+{{--                                    {{ $a }}--}}
+                                    <img style="width: 100px;height: 100px;object-fit: cover;" src="{{ asset("storage/article/".$a) }}" alt="{{ $a }}">
+                                @endif
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endisset
             </div>
         </div>
     </div>

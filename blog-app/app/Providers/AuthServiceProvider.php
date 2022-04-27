@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Article;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -24,7 +27,11 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //
+        Gate::define("article-delete",function (User $user,Article $article){
+            if (Auth::user()->role != 0){
+                return $user->id == $article->user_id;
+            }
+            return true;
+        });
     }
 }
